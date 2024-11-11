@@ -54,7 +54,7 @@ export class UserController {
         @Res() res,
         ): Promise<UserVm> {
         const errorResp = new ApiException();
-        const { username, email, firstName } = registerVm;
+        const { username, email } = registerVm;
 
         let existUsername;
         let existEmail;
@@ -74,7 +74,17 @@ export class UserController {
         }
 
         const newUser = await this.userService.register(registerVm);
-        res.send(this.userService.map<UserVm>(newUser));
+        const userVm: UserVm = {
+            username: newUser.username,
+            nick: newUser.nick,
+            avatarUrl: newUser.avatarUrl,
+            firstName: newUser.firstName,
+            lastName: newUser.lastName,
+            fullName: newUser.fullName,
+            role: newUser.role,
+        };
+
+        res.send(userVm);
     }
 
     @Post('login')

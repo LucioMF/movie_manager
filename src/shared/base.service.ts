@@ -1,10 +1,8 @@
-import 'automapper-ts/dist/automapper';
 import { Types, ClientSession } from 'mongoose';
 import { ReturnModelType, DocumentType } from '@typegoose/typegoose';
 
 export abstract class BaseService<T> {
     protected model: ReturnModelType<any>; // <typeof T>;
-    protected mapper: AutoMapperJs.AutoMapper;
 
     private get modelName(): string {
         return this.model.modelName;
@@ -12,15 +10,6 @@ export abstract class BaseService<T> {
 
     private get viewModelName(): string {
         return `${this.model.modelName}Vm`;
-    }
-
-    async map<K>(
-        object: Partial<DocumentType<T>> | Array<Partial<DocumentType<T>>>,
-        isArray: boolean = false, sourceKey?: string, destinationKey?: string): Promise<K> {
-
-        const srcKey = isArray ? `${sourceKey || this.modelName}[]` : sourceKey || this.modelName;
-        const destKey = isArray ? `${destinationKey || this.viewModelName}[]` : destinationKey || this.viewModelName;
-        return this.mapper.map(srcKey, destKey, object);
     }
 
     async findAll(filter = {}): Promise<DocumentType<T>[]> {
