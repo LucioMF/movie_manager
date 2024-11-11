@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  mongo:
+    # Use the Dockerfile to build the MongoDB service
+    build: .
+    container_name: movie-manager-db
+    environment:
+      # Specify the initial database name
+      MONGO_INITDB_DATABASE: movie-manager
+    ports:
+      - "27017:27017" # Map the container's MongoDB port to the host
+    volumes:
+      - mongo_data:/data/db # Use a volume for data persistence
+
+volumes:
+  mongo_data:
+    driver: local
