@@ -41,36 +41,4 @@ export class MovieService extends BaseService<Movie> {
       throw new InternalServerErrorException('Failed to fetch and save movies', error.message);
     }
   }
-
-//   async findById(id: string): Promise<Movie> {
-//     const movie = await this.movieModel.findById(id).exec();
-//     if (!movie) {
-//       throw new InternalServerErrorException(`Movie with ID ${id} not found`);
-//     }
-//     return movie;
-//   }
-
-//   async findAll(): Promise<Movie[]> {
-//     return this.movieModel.find().exec();
-//   }
-
-//   async create(movieData: Movie): Promise<Movie> {
-//     const newMovie = new this.movieModel(movieData);
-//     return newMovie.save();
-//   }
-
-//   async update(id: string, movieData: Partial<Movie>): Promise<Movie> {
-//     const updatedMovie = await this.movieModel.findByIdAndUpdate(id, movieData, { new: true }).exec();
-//     if (!updatedMovie) {
-//       throw new InternalServerErrorException(`Movie with ID ${id} not found`);
-//     }
-//     return updatedMovie;
-//   }
-
-//   async delete(id: string): Promise<void> {
-//     const result = await this.movieModel.findByIdAndDelete(id).exec();
-//     if (!result) {
-//       throw new InternalServerErrorException(`Movie with ID ${id} not found`);
-//     }
-//   }
 }

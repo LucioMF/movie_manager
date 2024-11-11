@@ -7,6 +7,7 @@ import { getModelToken } from '@nestjs/mongoose';
 import { ForbiddenException } from '@nestjs/common';
 import { Movie } from '../models/movie.model';
 import { DocumentType } from '@typegoose/typegoose';
+import { UpdateMovieVm } from '../models/view-models/update-movie.vm';
 
 describe('MovieController', () => {
   let controller: MovieController;
@@ -34,44 +35,44 @@ describe('MovieController', () => {
     expect(controller).toBeDefined();
   });
 
-  it('should return all Movies (User role)', async () => {
+  it('should return all Movies (User or Admin role)', async () => {
     const mockMovies = [
-        {
-            title: 'Movie 1',
-            episode: 1,
-            opening_crawl: 'Opening crawl 1',
-            director: 'Director 1',
-            producer: 'Producer 1',
-            release_date: '1977-05-25',
-          } as unknown as DocumentType<Movie>,
-        {
-            title: 'Movie 2',
-            episode: 2,
-            opening_crawl: 'Opening crawl 2',
-            director: 'Director 1',
-            producer: 'Producer 1',
-            release_date: '1980-01-01',
-          } as unknown as DocumentType<Movie>,
-    ];
-    jest.spyOn(service, 'findAll').mockResolvedValue(mockMovies);
-
-    const result = await controller.getMovies();
-    expect(result).toEqual(mockMovies);
-  });
-
-  it('should return specific Movie (User role)', async () => {
-    const mockMovie = {
+      {
         title: 'Movie 1',
         episode: 1,
         opening_crawl: 'Opening crawl 1',
         director: 'Director 1',
         producer: 'Producer 1',
         release_date: '1977-05-25',
-      } as unknown as DocumentType<Movie>;
+      } as unknown as DocumentType<Movie>,
+      {
+        title: 'Movie 2',
+        episode: 2,
+        opening_crawl: 'Opening crawl 2',
+        director: 'Director 1',
+        producer: 'Producer 1',
+        release_date: '1980-01-01',
+      } as unknown as DocumentType<Movie>,
+    ];
+    jest.spyOn(service, 'findAll').mockResolvedValue(mockMovies);
+
+    const result = await controller.getAllMovies();
+    expect(result).toEqual(mockMovies);
+  });
+
+  it('should return specific Movie (User role only)', async () => {
+    const mockMovie = {
+      title: 'Movie 1',
+      episode: 1,
+      opening_crawl: 'Opening crawl 1',
+      director: 'Director 1',
+      producer: 'Producer 1',
+      release_date: '1977-05-25',
+    } as unknown as DocumentType<Movie>;
 
     jest.spyOn(service, 'findById').mockResolvedValue(mockMovie);
 
-    const result = await controller.getMovies('some-id');
+    const result = await controller.getMovieById('some-id');
     expect(result).toEqual(mockMovie);
   });
 
@@ -91,7 +92,7 @@ describe('MovieController', () => {
   });
 
   it('should update Movie (Admin role)', async () => {
-    const updatedMovie = { title: 'The Empire Strikes Back - Updated' } as any;
+    const updatedMovie = { title: 'The Empire Strikes Back - Updated' } as UpdateMovieVm;
     jest.spyOn(service, 'update').mockResolvedValue(updatedMovie as any);
 
     const result = await controller.updateMovie('some-id', updatedMovie);

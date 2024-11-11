@@ -29,13 +29,20 @@ export class MovieController {
     @ApiResponse({ status: HttpStatus.OK, type: [Movie] })
     @ApiResponse({ status: HttpStatus.FORBIDDEN, type: ApiException })
     @ApiResponse({ status: HttpStatus.BAD_REQUEST, type: BadRequestException })
-    @ApiOperation(GetOperationMetadata(Movie.modelName, 'Get Details', null, 'Get details from one movie or get all movies'))
-    @ApiQuery({ name: 'id', required: false, description: 'ID of the movie to fetch (optional)' })
-    async getMovies(@Query('id', ParseMongoIdPipe) id?: string): Promise<Movie | Movie[]> {
-        if (id) {
-            return this.movieService.findById(id);
-        }
-        return this.movieService.findAll();
+    @ApiOperation({ summary: 'Get list of all movies' })
+    async getAllMovies(): Promise<Movie[]> {
+      return this.movieService.findAll();
+    }
+
+    @Get(':id')
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(UserRole.User)
+    @ApiResponse({ status: HttpStatus.OK, type: Movie })
+    @ApiResponse({ status: HttpStatus.FORBIDDEN, type: ApiException })
+    @ApiResponse({ status: HttpStatus.BAD_REQUEST, type: BadRequestException })
+    @ApiOperation({ summary: 'Get details of a specific movie' })
+    async getMovieById(@Param('id', ParseMongoIdPipe) id: string): Promise<Movie> {
+      return this.movieService.findById(id);
     }
 
     @Post()

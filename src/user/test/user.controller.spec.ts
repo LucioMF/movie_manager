@@ -25,18 +25,6 @@ describe('UserController', () => {
             register: jest.fn(),
             login: jest.fn(),
             findOne: jest.fn(),
-            map: jest.fn().mockImplementation((user) => {
-                // Simulate mapping to UserVm
-                return Promise.resolve({
-                  username: user.username,
-                  email: user.email,
-                  firstName: user.firstName,
-                  lastName: user.lastName,
-                  nick: user.nick,
-                  avatarUrl: user.avatarUrl,
-                  role: user.role,
-                } as UserVm);
-              }),
             },
         },
         {
